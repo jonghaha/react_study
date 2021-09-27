@@ -265,7 +265,7 @@ class App extends React.Component {
 }
 ```
 
-##04. Route
+## 04. Route
 * URI와 js파일을 매칭하여 랜더링
 * path가 겹치는 경우 2개 js파일을 같이 랜더링
 ```

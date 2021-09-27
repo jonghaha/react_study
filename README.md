@@ -75,7 +75,7 @@ function App() {
 }
 ```
 
-* Dynamic Component
+* 동적 컴포넌트
 ```
 function Hello({ name }}) {
     return <h1>Hello {name}</h1>;
@@ -157,10 +157,15 @@ function App() {
 }
 ```
 
-* Protection with PropTypes
+* PropTypes를 사용한 타입 검사
 ```
 function Hello({ name }}) {
     return <h1>Hello {name}</h1>;
+}
+
+Hello.propTypes = {
+    id: PropTypes.number.isRequired,
+    name: PropTypes.string.isRequired
 }
 
 const studyName = [
@@ -188,7 +193,7 @@ const studyName = [
         id: 6,
         name: "evelyn"
     }
-]
+];
 
 function renderName(names) {
     return <Hello key={names.id} name={names.name} />
@@ -199,4 +204,92 @@ function App() {
         <div>{studyName.map(renderName)}</div>
     );
 }
+```
+
+* 클래스에 State 추가
+
+    > set state를 호출할 때마다 react는 새로운 state와 함께 reder funtion 호출하여 다시 랜더링.
+```
+class App extends React.Component {
+    constructor() {
+        super(props);
+        this.state = {
+            count: 0
+        };
+    };
+    /*
+    state = {
+        count: 0
+    };
+    */
+    add = () => {
+        this.setState({current => ({ count : current.count + 1 })});
+    }
+    minus = () => {
+        this.setState({current => ({ count : current.count - 1 })});
+    }
+    render() {
+        return (
+            <div>
+                <h1>Count is: {this.state.count}</h1>
+                <button onClick={this.add}>Add</button>
+                <button onClick={this.minus}>minus</button>
+            </div>
+        );
+    }
+}
+```
+
+* 클래스컴포넌트 생명주기
+
+    > state에 추가되지 않아도 사용가능하지만 미래에 사용될 변수들을 미리 선언하는게 좋음.
+```
+class App extends React.Component {
+    constructor() {
+        super(props);
+        this.state = {
+            isLoading: true
+        };
+    }
+
+    componentiDidMount() {
+        setTimeout(() => {
+            this.setState({ isLoading: false });
+        }, 6000);
+    }
+
+    render() {
+        const { isLoading } = this.state;
+        return <div>{isLoading ? "Loading" : "ready"}</div>;
+    }
+}
+```
+
+##04. Route
+* URI와 js파일을 매칭하여 랜더링
+* path가 겹치는 경우 2개 js파일을 같이 랜더링
+```
+function App() {
+  return (
+    <HashRouter>
+      <Route path="/" exact={true} component={default} />
+      <Route path="/main" component={main} />
+      <Route path="/home/:id" component={home} />
+    </HashRouter>
+  );
+}
+```
+* 링크를 통해서 정보를 라우터에 전달하여 다른 컴포넌트에 전달
+```
+<Link to={{
+    pathname: "/main",
+    state: {
+        id,
+        name
+    }
+}}>
+```
+* 리다이렉트
+```
+this.props.history.push("/");
 ```
